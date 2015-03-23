@@ -26,13 +26,18 @@ RUN cd /root \
 && cd /root/spring-framework \
 && ln -s /root/spring-build spring-build
 
+# Fix build failure due to git clone (missing empty directory)
+RUN mkdir -p /root/spring-framework/org.springframework.{asm,integration-tests}/src/{main,test}/{java,resources}
+
 # Set environment variables.
 ENV HOME /root
 ENV ANT_HOME /opt/apache-ant-1.7.1
+ENV JAVA_OPTS "-Xms256m -Xmx512m -XX:MaxPermSize=128m"
+ENV ANT_OPTS "-Xms256m -Xmx512m -XX:MaxPermSize=128m"
 ENV PATH $ANT_HOME/bin:$PATH
 
 # Define working directory.
-WORKDIR /root
+WORKDIR /root/spring-framework/build-spring-framework
 
 # Define default command.
 CMD ["bash"]
